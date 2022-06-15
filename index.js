@@ -31,13 +31,41 @@ app.get('/registrar', (req, res) => {
             contenido = JSON.parse(contenido);
             contenido.push(usuario);
             contenido = JSON.stringify(contenido, null, 4);
-            
+
             fs.writeFile(rutaArchivo, contenido, 'utf-8', (error) => {
                 // Por cada consulta realizada al servidor se debe devolver al cliente una lista con los datos de todos los usuarios 
                 // registrados usando Lodash para dividir el arreglo en 2, segmentando los usuarios por sexo.
 
+                var personas = JSON.parse(contenido);
+
+                let mujeres = _.filter(personas, (item) => {
+                    return item.sexo === 'female'
+                });
+                let hombres = _.filter(personas, (item) => {
+                    return item.sexo === 'male'
+                });
+
+                let data = `El usuario ${usuario.nombre} ${usuario.apellido} ha sido registrado con éxito<br><br>`
+
+                data += "<br>Mujeres<br>"
+                mujeres.forEach((mujer, index) => {
+                    data += `${index + 1}. Nombre ${mujer.nombre} - Apellido: ${mujer.apellido} - ID: ${mujer.id} - Timestamp: ${mujer.timestamp}<br>`
+                })
+
+                data += "<br>Hombres<br>"
+                hombres.forEach((hombre, index) => {
+                    data += `${index + 1}. Nombre: ${hombre.nombre} - Apellido: ${hombre.apellido} - ID: ${hombre.id} - Timestamp: ${hombre.timestamp}<br>`
+                })
+
+
+                error ? res.send("Ha ocurrido un error") : res.send(data);
+                // En cada consulta también se debe imprimir por la consola del servidor la misma lista de usuarios pero
+                // con fondo blanco y color de texto azúl usando el paquete Chalk.
+                console.log(chalk.blue.bgWhite(contenido));
+            })
 
 
 
+        })
     })
-})
+});

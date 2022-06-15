@@ -23,7 +23,7 @@ app.get('/registrar', (req, res) => {
             sexo: respuesta.data.results[0].gender,
             id: codigo.slice(0, 8),
             // Cada usuario registrado dene tener su campo id único generado por el paquete UUID.
-            timestamp moment().format('YYYY-MM-DD HH:mm:ss')
+            timestamp : moment().format('YYYY-MM-DD HH:mm:ss')
             // Cada usuario debe tener un campo timestamp almacenando la fecha de registro obtenida y formateada por el paquete Moment.
         }
 
